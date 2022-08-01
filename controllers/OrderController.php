@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Order;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -80,7 +81,9 @@ class OrderController extends Controller
         $model = new Order();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+                $model->user_id = Yii::$app->user->identity->id;
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

@@ -1,10 +1,12 @@
 <?php
 
+use yii\bootstrap4\Modal;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Event */
+/* @var $order app\models\Order */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Events', 'url' => ['index']];
@@ -13,29 +15,32 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="event-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name',
-            'description',
-            'tickets',
-            'image',
-            'price',
-        ],
-    ]) ?>
-
+    <div class="jumbotron">
+        <h1 class="display-4"><?= $model->name ?></h1>
+        <p class="lead"><?= $model->description ?></p>
+        <hr class="my-4">
+        <p>Осталось билетов: <?= $model->tickets ?></p>
+        <p class="lead">
+            <?php if (!Yii::$app->user->isGuest): ?>
+            <a id="booking" class="btn btn-primary btn-lg" href="#" role="button">Забронировать</a>
+            <?php endif; ?>
+        </p>
+    </div>
+    <?= Html::hiddenInput('ticket', $model->price, ['id' => 'ticket-price']); ?>
 </div>
+
+<?php
+    Modal::begin([
+            'id' => 'modal'
+    ]);
+        $form = \yii\widgets\ActiveForm::begin(['action' => ['order/create']]);
+            echo $form->field($order, 'amount')->textInput();
+            echo $form->field($order, 'event_id')->hiddenInput(['value' => $model->id]);
+            echo '<h4 class="price"> </h4>';
+            echo Html::submitButton('Забронировать', ['class' => 'btn btn-primary']);
+        \yii\widgets\ActiveForm::end();
+    Modal::end();
+
+    $this->registerJs("$('#booking').click(() => { $('#modal').modal('show'); });");
+    $this->registerJs("setInterval(() => { $('.price').html($('#order-amount').val() * $('#ticket-price').val() + ' &#8381;')}, 1)");
+?>

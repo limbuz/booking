@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Event;
+use app\models\Order;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -66,6 +67,7 @@ class EventController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'order' => new Order()
         ]);
     }
 
