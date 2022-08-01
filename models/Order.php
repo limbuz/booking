@@ -46,7 +46,7 @@ class Order extends \yii\db\ActiveRecord
             'id' => 'ID',
             'event_id' => 'Event ID',
             'user_id' => 'User ID',
-            'amount' => 'Amount',
+            'amount' => 'Количество',
         ];
     }
 

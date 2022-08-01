@@ -82,7 +82,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getId()
     {
-        return Yii::$app->user->identity->id;
+        return $this->id;
     }
 
     public function getAuthKey()

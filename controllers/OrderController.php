@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Event;
 use app\models\Order;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -84,7 +85,17 @@ class OrderController extends Controller
             if ($model->load($this->request->post())) {
                 $model->user_id = Yii::$app->user->identity->id;
                 $model->save();
-                return $this->redirect(['view', 'id' => $model->id]);
+
+                $event = Event::findOne(['id' => $model->event_id]);
+                if ($model->amount > $event->tickets) {
+                    Yii::$app->session->setFlash('error', 'Не удалось забронировать такое количество билетов');
+                    return $this->redirect(['event/view', 'id' => $event->id]);
+                }
+                $event->tickets -= $model->amount;
+                $event->save();
+
+                Yii::$app->session->setFlash('success', 'Билеты забронированы');
+                return $this->redirect(['event/view', 'id' => $event->id]);
             }
         } else {
             $model->loadDefaultValues();
