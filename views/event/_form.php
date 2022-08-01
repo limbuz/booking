@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'tickets')->textInput() ?>
 
-    <?= $form->field($model, 'image')->textInput() ?>
+    <?= $form->field($model, 'image')->fileInput() ?>
 
     <?= $form->field($model, 'price')->textInput() ?>
 

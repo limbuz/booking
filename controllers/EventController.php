@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * EventController implements the CRUD actions for Event model.
@@ -40,16 +41,14 @@ class EventController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Event::find(),
-            /*
             'pagination' => [
-                'pageSize' => 50
+                'pageSize' => 10
             ],
             'sort' => [
                 'defaultOrder' => [
                     'id' => SORT_DESC,
                 ]
             ],
-            */
         ]);
 
         return $this->render('index', [
@@ -80,8 +79,14 @@ class EventController extends Controller
         $model = new Event();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post()) && $model->validate()) {
+                $model->image = UploadedFile::getInstance($model, 'image');
+                $model->image->saveAs('uploads/' . $model->image->baseName . '.' . $model->image->extension);
+                $model->image = 'uploads/' . $model->image->baseName . '.' . $model->image->extension;
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
