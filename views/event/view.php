@@ -9,7 +9,6 @@ use yii\widgets\DetailView;
 /* @var $order app\models\Order */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Events', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

@@ -43,14 +43,17 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
+        'defaultRoute' => 'event/index',
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => 'event/index',
+                'event/view/<id:\d+>' => 'event/view',
+                'login' => 'site/login',
+                'registration' => 'site/register',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
