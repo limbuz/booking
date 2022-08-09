@@ -84,7 +84,7 @@ class EventController extends Controller
             if ($model->load($this->request->post()) && $model->validate()) {
                 $model->image = UploadedFile::getInstance($model, 'image');
 
-                if (!directoryExists('uploads/')) {
+                if (!file_exists('uploads/')) {
                     mkdir('uploads/');
                 }
 

@@ -13,7 +13,9 @@ $this->title = 'Афиша';
 ?>
 <div class="event-index">
 
-    <h1><?= Html::encode($this->title) ?></h1> <hr>
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?php if (!Yii::$app->user->IsGuest) echo Html::a('Создать мероприятие', ['event/create'], ['class' => 'btn btn-primary']) ?>
+     <hr>
 
     <?php $items = [];
     foreach (Event::find()->limit(3)->all() as $event) {
